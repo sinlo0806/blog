@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ArticleMapper">
+<select id="select" resultType="com.example.demo.po.Article">
+  SELECT * from article
+</select>
+  <select id="findByIdArticle" parameterType="int" resultType="com.example.demo.po.Article">
+    SELECT * FROM article WHERE id=#{id}
+  </select>
+  <insert id="addAticle" parameterType="com.example.demo.po.Article">
+    insert into  article( <include refid="lsqField"></include> )  VALUES(#{title},#{content},#{views},#{goods},#{rubbis},#{creationdate},#{contenttype},#{userid},#{introduction},#{coverimage});
+
+  </insert>
+  <select id="findNewArticle" parameterType="int" resultType="com.example.demo.po.AricleExtended">
+    select * from article Order By  creationDate desc,id desc  limit  #{id}, 10
+  </select>
+
+  <sql id="lsqField" >
+    title,content,views,goods,rubbis,creationDate,contentType,userID,Introduction,coverimage
+  </sql>
+  <update id="addviews" parameterType="int">
+    update article set views=(views+1) where id=#{id};
+  </update>
+  <select id="findArticleTitle" parameterType="com.example.demo.po.PageModel" resultType="com.example.demo.po.AricleExtended">
+     SELECT * FROM article WHERE title like  '%${title}%'  Order By  creationDate desc,id desc  limit #{indexOf},10
+  </select>
+
+  <select id="countArticle" resultType="int">
+    SELECT COUNT( * ) FROM article
+  </select>
+  <select id="countArticleTitle"  parameterType="java.lang.String" resultType="int">
+    SELECT COUNT( * ) FROM article WHERE title like  '%${value}%'
+  </select>
+  <select id="clickArticle" resultType="com.example.demo.po.AricleExtended">
+    select id,title,creationDate from article  order by views desc  limit 5;
+  </select>
+
+
+  <select id="nextArticle" parameterType="int" resultType="com.example.demo.po.AricleExtended">
+    select id,title,creationDate from article WHERE id&lt;#{id} order by id desc LIMIT 1;
+  </select>
+  <select id="previousArticle" parameterType="int" resultType="com.example.demo.po.AricleExtended">
+    select id,title,creationDate from article WHERE id>#{id}  LIMIT 1;
+  </select>
+</mapper>

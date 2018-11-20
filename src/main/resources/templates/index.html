@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"  >
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script th:src="@{/js/js.js}"></script>
+        <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/login.css}" rel="stylesheet"/>
+    <link th:href="@{/css/index.css}" rel="stylesheet"/>
+
+    <title>罗东荣的博客</title>
+</head>
+<body >
+
+<div class="top fontWhite">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-5">
+                <a href="/" class="titleA"> <img th:src="@{/img/img.jpg}" alt="sin" class="img-circle" height="40px" width="40px">
+                    <span>没有钱的小咸鱼</span></a>
+                <span class="pull-right visible-sm visible-xs" id="menuButton">
+                          <span class="glyphicon glyphicon-list" height="50px"></span></span>
+            </div>
+
+            <div class="col-md-7 hidden-xs hidden-sm" >
+                <div class="row">
+                    <div class="col-ms-4 ">
+                    </div>
+                    <div class="col-md-2"><a th:href="@{/}" class="titleA">首页</a></div>
+                    <div class="col-md-2" ><span id="SendarticlesMS">写博客</span></div>
+                    <div class="col-md-2"><a href="/comment/leaveMeAMessage" class="titleA">给我留言</a></div>
+                    <div class="col-md-2"><a href="#" class="titleA">分享</a></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container top65">
+    <div class="row">
+
+        <!--左则-->
+        <div class="col-md-9 bg"   >
+            <div class="row">
+                <div class="divhr"><span class="glyphicon glyphicon-education"></span><span><b>最新文章</b></span></div>
+            </div>
+        <div th:if="${not #lists.isEmpty(articles)}" >
+
+            <div class="row" th:each="article:${articles}" >
+                <a th:href="@{'article/'+${article.id}+'/blog'}"> <h4 th:text="${article.title}"> </h4></a>
+
+                <div class="col-xs-4 col-md-2  zimg" th:if="${not #lists.isEmpty(article.coverimage)}">
+                    <div><span class="zimg" th:utext="${article.coverimage}"   ></span></div>
+                </div>
+                <div class="col-xs-8 col-md-10  divHeight100 fontSize15 indent25"  style="overflow: hidden;"  th:if="${not #lists.isEmpty(article.coverimage)}">
+                    <span th:text="${article.Introduction}"> </span>
+                </div>
+
+                <div class="col-xs-12 col-md-12  divHeight100 fontSize15 indent25"  style="overflow: hidden;"  th:if="${ #lists.isEmpty(article.coverimage)}" >
+                    <span th:text="${article.Introduction}"> </span>
+                </div>
+
+                <div class="divhr"><span class="glyphicon glyphicon-time"></span><span th:text="${article.date}"></span> <span class="glyphicon glyphicon-eye-open"></span>浏览(<span th:text="${article.views}"></span>)<span class="pull-right" ><a th:href="@{'article/'+${article.id}+'/blog'}"style="color: olivedrab;">阅读全文>></a></span></div>
+            </div>
+
+            <center>
+                <nav aria-label="Page navigation "  >
+
+                    <ul class="pagination" >
+                        <li th:if="${page.page}>1">
+                            <a th:href="@{'/'+${page.page-1}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${page.page-2}>0"><a th:href="@{'/'+${page.page-2}}"  th:text="${page.page-2}"></a></li>
+                        <li th:if="${page.page-1}>0"><a th:href="@{'/'+${page.page-1}}" th:text="${page.page-1}"></a></li>
+                        <li class="disabled"><span  style="color: red;" th:text="${page.page}"> </span></li>
+                        <li th:if="${page.page+1}<=${page.maxPage}"><a th:href="@{'/'+${page.page+1}}" th:text="${page.page+1}"></a></li>
+                        <li th:if="${page.page+2}<=${page.maxPage}"><a th:href="@{'/'+${page.page+2}}" th:text="${page.page+2}"></a></li>
+                        <li th:if="${page.page+1}<=${page.maxPage}">
+                            <a th:href="@{'/'+${page.page+1}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+
+
+                </nav>
+            </center>
+
+</div>
+        </div>
+        <div style="height: 20px;" class="visible-xs visible-sm"></div>
+        <!--右侧-->
+        <div class="col-md-3" >
+
+            <div class="row">
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-10 " >
+                    <!--搜索框-->
+                    <div class="row height100 bg"  >
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-10 ">
+                            <form class="form-horizontal top32">
+                                <div class="form-group ">
+                                    <label class="sr-only" for="exampleInputAmount">search (in dollars)</label>
+                                    <div class="input-group">
+                                        <input type="search"  class="form-control search"  id="exampleInputAmount" placeholder="search">
+                                        <div class="input-group-addon  search  searchbg"><span>搜索</span></div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+                    <!--右侧下面-->
+                    <div class="row theRight bg indent25  hidden-xs hidden-sm">
+                        <br>
+                        <h4 >点击排行</h4>
+                        <div th:each="click:${clicks}" >
+                        <p><a th:href="@{'article/'+${click.id}+'/blog'}" th:text="${click.title}"> </a></p>
+                        </div>
+
+                        <h4 class="center-block">关于我</h4>
+                        <p>姓名:罗东荣</p>
+                        <p>职业:学生</p>
+                        <p>邮箱:874471992@qq.com</p>
+
+                </div>
+
+                    <div class="row  hidden-xs hidden-sm" style="  border-radius:15px; background: white;position: relative;top:30px"   >
+
+                     <h4 id="FLinksbtn" style="line-height: 30px;">友情链接</h4>
+                        <div style=" text-align: center; " id="FLinks">
+                            <p><a href="https://lsun.net/" target="_blank"><span>Young sun</span></a> <span> | <span> <a href="https://ybin.top/" target="_blank"><span >奕彬blog</span></a></p>
+
+
+                        </div>
+
+                    </div>
+                    <div style="height: 20px; " class="hidden-xs hidden-sm"></div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+</div>
+<div class="down fontWhite"><center><p >isin.win</p></center></div>
+
+
+
+<div class="col-xs-12  xslogin" id="xslogin">
+    <span class="glyphicon glyphicon-chevron-left translation" id="closeXslogin"></span>
+
+    <h3 >登录</h3>
+    <span class="erropwd" style="color: red; display: none">账号或密码错误!</span>
+    <div class="m20">
+        <form class="form-horizontal" id="xsfm" method="POST" action="login/Verification">
+            <div class="form-group">
+                <label class="sr-only" for="xsUserName">用户名</label>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                    <input type="text" class="form-control" name="user" id="xsUserName" placeholder="请输入用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="xsUserPassword">密码</label>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                    <input type="password" class="form-control" name="password"  id="xsUserPassword" placeholder="请输入密码">
+                </div>
+            </div>
+            <button type="button" id="xsButton" class="btn btn-success btn-block" style="position: relative;top: 10px">登录</button>
+        </form>
+    </div>
+</div>
+
+<!--菜单-->
+<div id="menu" class="indent ">
+    <a th:href="@{/}" class="titleA">  <p>
+       首页</p></a>
+    <hr  class="menuHr"/>
+    <p id="SendarticlesXS">写博客</p>
+    <hr  class="menuHr" />
+    <a href="/comment/leaveMeAMessage" class="indent titleA" >  <p > 给我留言</p></a>
+    <hr class="menuHr" />
+    <a href="#" class="indent titleA">   <p>  分享</p></a>
+    <hr  class="menuHr"/>
+</div>
+
+<div id="mdLogin">
+    <p id="MdloginP"><span class="glyphicon glyphicon-remove translation" ></span></p>
+    <h3 >登录</h3>
+    <div class="m20">
+        <span class="erropwd" style="color: red; display: none">账号或密码错误!</span>
+        <form class="form-horizontal" id="fm" method="POST" th:action="@{login/Verification}">
+            <div class="form-group">
+                <label class="sr-only" for="mdUserName">用户名</label>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                    <input type="text" class="form-control" name="user" id="mdUserName" placeholder="请输入用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="mdUserPassword">密码</label>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                    <input type="password" class="form-control" name="password" id="mdUserPassword" placeholder="请输入密码">
+                </div>
+            </div>
+            <button type="button" id="mdButton" class="btn btn-success btn-block" style="position: relative;top: 10px">登录</button>
+        </form>
+    </div>
+</div>
+<div id="zyan"></div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CommentMapper">
+
+    <sql id="insertField">
+        username,email,commentcontent,articleid,creationdate,http
+    </sql>
+<insert id="commentArticle" parameterType="com.example.demo.po.CommentExtended">
+ insert into comment(<include refid="insertField"></include> ) VALUE(#{username},#{email},#{commentcontent},#{articleid},#{creationdate},#{http})
+</insert>
+    <select id="selectComment" resultType="com.example.demo.po.CommentExtended">
+        select * from comment WHERE articleid=#{articleid} Order By  id Desc   limit   10
+    </select>
+    <sql id="insertReplyField">
+        username,email,commentcontent,articleid,creationdate,http,responderid,responderemail,respondereanme
+    </sql>
+    <insert id="replyComment" parameterType="com.example.demo.po.CommentExtended">
+        insert into comment(<include refid="insertReplyField"></include> ) VALUE(#{username},#{email},#{commentcontent},#{articleid},#{creationdate},#{http},#{responderid},#{responderemail},#{respondereanme})
+    </insert>
+
+</mapper>
