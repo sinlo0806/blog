@@ -89,7 +89,7 @@ private MailService mailService;
      }
 
     /**
-     *      给我留言
+     *      留言
      * @param commentExtended  留言内容
      * @return  返回首页
      */
